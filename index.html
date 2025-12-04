@@ -1,37 +1,300 @@
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard de Entradas</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<title>Dashboard Financeiro - Avançado</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body {
+        background: #0f0f0f;
+        color: #e0e0e0;
+        font-family: Arial;
+        padding: 20px;
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #fff;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .box {
+        background: #1b1b1b;
+        padding: 15px;
+        border-radius: 10px;
+        width: 220px;
+        text-align: center;
+        box-shadow: 0px 0px 8px #000;
+    }
+
+    button {
+        padding: 10px;
+        margin: 5px;
+        width: 120px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-main { background: #1976d2; color: white; }
+    .btn-filter { background: #00897b; color: white; }
+    .btn-reset { background: #c62828; color: white; }
+    .btn-export { background: #f9a825; color: black; }
+
+    .panel {
+        margin: 25px auto;
+        background: #1d1d1d;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 700px;
+        box-shadow: 0px 0px 8px #000;
+    }
+
+    select, input[type="checkbox"] {
+        margin: 5px;
+    }
+
+    .total-box {
+        font-size: 20px;
+        margin-top: 20px;
+        background: #212121;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        color: #fff;
+    }
+</style>
 </head>
+
 <body>
 
+<h1>Dashboard Financeiro — Versão Avançada</h1>
+
 <div class="container">
-    <h2>Dashboard de Entradas</h2>
 
-    <div class="painel">
-        <div class="card">
-            <h3>Total de Pessoas</h3>
-            <p id="totalPessoas">0</p>
-        </div>
-
-        <div class="card">
-            <h3>Valor Total</h3>
-            <p id="valorTotal">0</p>
-        </div>
+    <div class="box">
+        <h3>Dinheiro</h3>
+        <p id="dinheiroValor">0</p>
+        <button class="btn-main" onclick="add('dinheiro')">Adicionar</button>
     </div>
 
-    <h3>Métodos de Pagamento</h3>
-    <canvas id="graficoPagamentos"></canvas>
+    <div class="box" style="background:#7f6f00;">
+        <h3>Crédito</h3>
+        <p id="creditoValor">0</p>
+        <button class="btn-main" onclick="add('credito')">Adicionar</button>
+    </div>
 
-    <h3>Gratuidades</h3>
-    <canvas id="graficoGratuidades"></canvas>
+    <div class="box">
+        <h3>Débito</h3>
+        <p id="debitoValor">0</p>
+        <button class="btn-main" onclick="add('debito')">Adicionar</button>
+    </div>
+
+    <div class="box">
+        <h3>Pix</h3>
+        <p id="pixValor">0</p>
+        <button class="btn-main" onclick="add('pix')">Adicionar</button>
+    </div>
 
 </div>
 
-<script src="script.js"></script>
+<h2>Gratuidade</h2>
+
+<div class="container">
+
+    <div class="box">
+        <h3>Lista (Free)</h3>
+        <p id="listaValor">0</p>
+        <button class="btn-main" onclick="add('lista')">Adicionar</button>
+    </div>
+
+    <div class="box">
+        <h3>Militar</h3>
+        <p id="militarValor">0</p>
+        <button class="btn-main" onclick="add('militar')">Adicionar</button>
+    </div>
+
+    <div class="box">
+        <h3>50 Pessoas</h3>
+        <p id="cinquentaValor">0</p>
+        <button class="btn-main" onclick="add('cinquenta')">Adicionar</button>
+    </div>
+
+    <div class="box">
+        <h3>Aniversário</h3>
+        <p id="aniversarioValor">0</p>
+        <button class="btn-main" onclick="add('aniversario')">Adicionar</button>
+    </div>
+
+</div>
+
+<div class="panel">
+    <h2>Filtros Avançados</h2>
+
+    <label><input type="checkbox" id="filtroPagos" checked onchange="filtrar()"> Pagos</label>
+    <label><input type="checkbox" id="filtroGratis" checked onchange="filtrar()"> Gratuitos</label>
+
+    <br><br>
+    <strong>Mostrar/Ocultar Categorias:</strong><br>
+
+    <div>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Dinheiro')"> Dinheiro</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Crédito')"> Crédito</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Débito')"> Débito</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Pix')"> Pix</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Lista (Free)')"> Lista</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Militar')"> Militar</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('50 Pessoas')"> 50 Pessoas</label>
+        <label><input type="checkbox" checked onchange="toggleCategoria('Aniversário')"> Aniversário</label>
+    </div>
+</div>
+
+<div class="total-box">
+    Valor Total: R$ <span id="valorTotal">0</span>
+</div>
+
+<canvas id="grafico" style="margin-top:30px;"></canvas>
+
+<div style="text-align:center; margin-top:40px;">
+    <button class="btn-reset" onclick="resetar()">Reset</button>
+    <button class="btn-export" onclick="exportar()">Exportar</button>
+</div>
+
+<script>
+let dados = {
+    dinheiro: 0,
+    credito: 0,
+    debito: 0,
+    pix: 0,
+    lista: 0,
+    militar: 0,
+    cinquenta: 0,
+    aniversario: 0
+};
+
+const labelsOriginais = [
+    "Dinheiro",
+    "Crédito",
+    "Débito",
+    "Pix",
+    "Lista (Free)",
+    "Militar",
+    "50 Pessoas",
+    "Aniversário"
+];
+
+function add(cat) {
+    dados[cat]++;
+    atualizar();
+}
+
+function atualizar() {
+    for (let key in dados) {
+        document.getElementById(key + "Valor").innerText = dados[key];
+    }
+
+    document.getElementById("valorTotal").innerText =
+        dados.dinheiro + dados.credito + dados.debito + dados.pix;
+
+    grafico.data.datasets[0].data = [
+        dados.dinheiro,
+        dados.credito,
+        dados.debito,
+        dados.pix,
+        dados.lista,
+        dados.militar,
+        dados.cinquenta,
+        dados.aniversario
+    ];
+
+    grafico.update();
+}
+
+function resetar() {
+    if (!confirm("Tem certeza?")) return;
+    for (let k in dados) dados[k] = 0;
+    atualizar();
+}
+
+function exportar() {
+    let txt = "RELATÓRIO DO DIA\n\n";
+    for (let k in dados) txt += `${k}: ${dados[k]}\n`;
+
+    let blob = new Blob([txt], { type: "text/plain" });
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "relatorio.txt";
+    a.click();
+}
+
+/* Filtros Avançados */
+function filtrar() {
+    const pagos = document.getElementById("filtroPagos").checked;
+    const gratis = document.getElementById("filtroGratis").checked;
+
+    grafico.data.datasets[0].data = [
+        pagos ? dados.dinheiro : 0,
+        pagos ? dados.credito : 0,
+        pagos ? dados.debito : 0,
+        pagos ? dados.pix : 0,
+        gratis ? dados.lista : 0,
+        gratis ? dados.militar : 0,
+        gratis ? dados.cinquenta : 0,
+        gratis ? dados.aniversario : 0
+    ];
+
+    grafico.update();
+}
+
+function toggleCategoria(nome) {
+    const index = grafico.data.labels.indexOf(nome);
+    const hidden = grafico.getDatasetMeta(0).data[index].hidden || false;
+    grafico.getDatasetMeta(0).data[index].hidden = !hidden;
+    grafico.update();
+}
+
+/* GRÁFICO COM ANIMAÇÃO AVANÇADA */
+const ctx = document.getElementById("grafico");
+let grafico = new Chart(ctx, {
+    type: "pie",
+    data: {
+        labels: labelsOriginais,
+        datasets: [{
+            data: [0,0,0,0,0,0,0,0],
+            backgroundColor: [
+                "#4caf50", "#ffeb3b", "#03a9f4", "#00e676",
+                "#7e57c2", "#ff7043", "#26c6da", "#ab47bc"
+            ],
+            borderColor: "#000",
+            borderWidth: 2
+        }]
+    },
+    options: {
+        animation: {
+            animateRotate: true,
+            animateScale: true,
+            duration: 1200,
+            easing: "easeOutQuart"
+        },
+        plugins: {
+            legend: {
+                labels: { color: "#fff" }
+            }
+        }
+    }
+});
+
+atualizar();
+</script>
 
 </body>
 </html>
-
